@@ -13,6 +13,7 @@ database_files=['.db', '.csv', '.dbf', '.json']
 script_files=['.py','.c', '.js', '.cpp', '.css', '.html', '.jsp', '.xml',
               '.jspx', '.cs', '.dart', '.swift', '.kt', '.kts', '.ktm']
 disk_file=['.iso']
+audio_file=['.wav', '.mp3']
 
 def ext_arrange(arr):
     dirr= arr[0]
@@ -30,6 +31,7 @@ def ext_arrange(arr):
         databases=list(filter(lambda x: os.path.splitext(x)[1] in database_files, os.listdir(dirr) ))
         scripts=list(filter(lambda x: os.path.splitext(x)[1] in script_files, os.listdir(dirr) ))
         iso=list(filter(lambda x: os.path.splitext(x)[1] in disk_file, os.listdir(dirr) ))
+        audio=list(filter(lambda x: os.path.splitext(x)[1] in audio_file, os.listdir(dirr) ))
 
 
         separation={'pictures': img,
@@ -41,15 +43,16 @@ def ext_arrange(arr):
                     'Spreadsheets': spreadsheets,
                     'Database_Files': databases,
                     'Scripts': scripts,
-                    'iso': iso
+                    'iso': iso,
+                    'audios': audio
                     }
 
         for folder in separation:
 
             if not os.path.exists(os.path.join(dirr, folder)):
-                new_folder=os.makedirs(os.path.join(dirr,folder))
-            else:
-                new_folder=os.path.join(dirr, folder)
+                os.makedirs(os.path.join(dirr,folder))
+            
+            new_folder=os.path.join(dirr, folder)
             try:
 
                 for file in separation[folder]:
@@ -67,7 +70,7 @@ def name_arrange(arr):
     dirr= arr[0]
     if os.path.isdir(dirr):
         # list initials of all file names
-        temp=list(map(lambda x: re.split('[\d\s_@#%&\'"*-]', x)[0], os.listdir(dirr)))
+        temp=list(map(lambda x: re.split(r'[\d\s_@#%&\'"*-]', x)[0], os.listdir(dirr)))
 
         all_files= [ os.path.splitext(x.lower())[0] for x in  temp]
 
@@ -81,10 +84,10 @@ def name_arrange(arr):
             # print(key)
             if not os.path.exists(os.path.join(dirr, key)):
 
-                new_folder=os.makedirs(os.path.join(dirr, key))
-            else:
+                os.makedirs(os.path.join(dirr, key))
+            
 
-                new_folder=os.path.join(dirr, key)
+            new_folder=os.path.join(dirr, key)
 
             for file in os.listdir(dirr):
 
@@ -120,19 +123,25 @@ def deep_arrange(arr):
 def compress(arr):
     kind, target=arr
 
-    assert os.path.exists(target)
+    assert os.path.isdir(target)
+    
     # archives to have the same name as the original file or directory
     arc=os.path.splitext(target)[0]
 
     if kind=='xztar':
         print('this might take some time. xztar is the slowest archiving technique')
         shutil.make_archive(arc,'xztar',target)
+        print('created an archive file. Now you can delete the original file')
     elif kind=='gztar':
         print('this might take some time')
         shutil.make_archive(arc,'gztar',target)
+        print('created an archive file. Now you can delete the original file')
     elif kind=='zip':
-        print('this might take some time. zip is the fastest archiving technique')
+        print('this might take some time. zip is the fastest archiving technique')        
         shutil.make_archive(arc,'zip',target)
+        print('created an archive file. Now you can delete the original file')
+    else:
+        print('archive type {} is either not supported by by your Operating System or not available')
 
 
 

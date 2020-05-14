@@ -12,12 +12,8 @@
 # 2 -> ext->pat->name
 
 # --compress or -c : converts the folder to zip file (default). It has the following arguments:
-# tar-> tar.xz ( only linux and mac )
+# tar-> tar.xz, tar.gz
 # zip-> zip format (compatible with all platforms )
-# 7z-> .7z format (must be installed in mac and windows. Present in linux)
-
-# --lock or -l : encrypts the folder or file with password. It takes 1 arguments password.
-# Warning: losing password would cause you to loose data
 
 import argparse
 import folder_manager_functions as fm
@@ -38,11 +34,6 @@ compress_info= '''
         zip-> zip format (compatible with all platforms )\n
 '''
 
-lock_info= '''
-    --lock or -l : encrypts the folder or file with password. It takes 1 arguments password.
-    Warning: losing password would cause you to loose data
-    Default password: 'password'
-'''
 
 
 
@@ -57,8 +48,7 @@ def main():
 
     parser.add_argument('-d', '--deep', default= [1, None], nargs= 2, metavar=('type', 'path'), help= deep_info)
     parser.add_argument('-c', '--compress', default= ['zip', None], nargs= 2, metavar=('format', 'path'), help= compress_info)
-    parser.add_argument('-l', '--lock', default= ['password', None], nargs= 2, metavar=('password', 'path'), help= lock_info)
-
+    
     # parsing arguments from parser object
     args = parser.parse_args()
 
