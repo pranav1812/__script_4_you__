@@ -5,8 +5,8 @@ from collections import Counter
 image_files=['.jpg','.jpeg','.png','.gif', '.bmp', '.svg','.jfif', '.dwg']
 text_and_document_files=['.pdf', '.txt', '.docx', '.doc', '.odt', '.ics']
 compressed_files=['.zip', '.rar', '.7z', '.jar', '.gz', '.xz', '.deb', '.arc', '.arj']
-video_files=['.mp4', '.m4p', '.m4v', '.mpv', '.mp2', '.webm']
-executable_files=['.exe', '.run', '.sh', '.desktop', '.out', '.bin']
+video_files=['.mp4', '.m4p', '.m4v', '.mpv', '.mp2', '.webm','.mkv']
+executable_files=['.exe', '.run', '.sh', '.desktop', '.out', '.bin','.msi']
 presentation_files=['.ppt', '.pptx', '.odp']
 spreadsheet_files=['.xls', 'xlsx','xlsb', '.xlsm', '.ods', '.sdc', 'sxc']
 database_files=['.db', '.csv', '.dbf', '.json']
@@ -67,7 +67,7 @@ def name_arrange(arr):
     dirr= arr[0]
     if os.path.isdir(dirr):
         # list initials of all file names
-        temp=list(map(lambda x: re.split('[\d\s_@#%&\'"*]', x)[0], os.listdir(dirr)))
+        temp=list(map(lambda x: re.split('[\d\s_@#%&\'"*-]', x)[0], os.listdir(dirr)))
 
         all_files= [ os.path.splitext(x.lower())[0] for x in  temp]
 
@@ -97,20 +97,22 @@ def name_arrange(arr):
 
 def deep_arrange(arr):
     mode, path=arr
-
+    
     assert os.path.isdir(path)
-
+    
     if mode=='1':
-        name_arrange(path)
+        # print('called deep arrange in mode {}'.format(mode))
+        name_arrange(os.path.splitext(path))
         for sub_path in os.listdir(path):
-            if os.path.isdir(sub_path):
-                ext_arrange(sub_path)
+           
+            if os.path.isdir(os.path.join(path,sub_path)):
+                ext_arrange(os.path.splitext(os.path.join(path,sub_path)))
 
     elif mode=='2':
-        ext_arrange(path)
+        ext_arrange(os.path.splitext(path))
         for sub_path in os.listdir(path):
-            if os.path.isdir(sub_path):
-                name_arrange(sub_path)
+            if os.path.isdir(os.path.join(path,sub_path)):
+                name_arrange(os.path.splitext(os.path.join(path,sub_path)))
 
     else:
         print('{} is not a valid mode. \n  python folder_manager.py -h'.format(mode))
