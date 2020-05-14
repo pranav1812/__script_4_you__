@@ -19,8 +19,6 @@ import argparse
 import folder_manager_functions as fm
 from time import time
 
-start_time= time()
-
 deep_info= '''
     --deep or -d : deep arrangement [ subfolders in folders ]. It has 2 arguments:
         1 -> name->ext\n
@@ -44,8 +42,7 @@ def main():
     # commandline arguments
     parser.add_argument('-e', '--ext', default = None, metavar="path", nargs = 1, help="arrange according to extension")
     parser.add_argument('-n', '--name', default = None, metavar="path", nargs = 1, help="arrange according to name")
-    parser.add_argument('-p', '--pat', default = None, metavar="path", nargs = 1, help="arrange according to common pattern")
-
+    
     parser.add_argument('-d', '--deep', default= [1, None], nargs= 2, metavar=('type', 'path'), help= deep_info)
     parser.add_argument('-c', '--compress', default= ['zip', None], nargs= 2, metavar=('format', 'path'), help= compress_info)
     
@@ -64,4 +61,7 @@ def main():
         fm.compress(args.compress)
 
 if __name__== '__main__':
+    start_time= time()
     main()
+    end_time= time()
+    print('process ended in {} seconds'.format(end_time-start_time))
